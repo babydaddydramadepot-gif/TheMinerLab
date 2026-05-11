@@ -239,9 +239,9 @@ document.addEventListener('DOMContentLoaded', () => {
 // 8. Reviews Carousel
 // ===================================
 document.addEventListener('DOMContentLoaded', () => {
-  const carousel = document.querySelector('.reviews-carousel');
-  const prevButton = document.querySelector('.carousel-prev');
-  const nextButton = document.querySelector('.carousel-next');
+  const carousel = document.querySelector('.reviews-scroller');
+  const prevButton = document.querySelector('.reviews-prev');
+  const nextButton = document.querySelector('.reviews-next');
   
   if (carousel && prevButton && nextButton) {
     prevButton.addEventListener('click', () => {

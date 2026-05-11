@@ -1,8 +1,36 @@
+{% assign asic_collection = collections['asic-miners'] %}
+{% assign power_collection = collections['power-supplies'] %}
+{% assign loki_collection = collections['loki-kits'] %}
+{% assign accessories_collection = collections['accessories'] %}
+
+{% assign active_category = collection.handle %}
+{% if request.query_string contains 'category=' %}
+  {% assign query_parts = request.query_string | split: '&' %}
+  {% for query_part in query_parts %}
+    {% if query_part contains 'category=' %}
+      {% assign active_category = query_part | split: '=' | last | downcase %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{% assign active_category_title = collection.title %}
+{% if active_category == 'asic-miners' %}
+  {% assign active_category_title = 'ASIC Miners' %}
+{% elsif active_category == 'power-supplies' %}
+  {% assign active_category_title = 'Power Supplies' %}
+{% elsif active_category == 'loki-kits' %}
+  {% assign active_category_title = 'Loki Kits' %}
+{% elsif active_category == 'accessories' %}
+  {% assign active_category_title = 'Accessories' %}
+{% elsif active_category == 'wholesale' %}
+  {% assign active_category_title = 'Wholesale' %}
+{% endif %}
+
 {% paginate collection.products by 12 %}
 <section class="collection-page section-spacing">
   <div class="container">
     <div class="collection-header reveal">
-      <h1 class="collection-title">{{ collection.title }}</h1>
+      <h1 class="collection-title">{{ active_category_title }}</h1>
       {% if collection.description != blank %}
         <div class="collection-description">{{ collection.description }}</div>
       {% endif %}
@@ -13,17 +41,20 @@
         <div class="filter-group">
           <h3 class="filter-heading">Categories</h3>
           <nav class="filter-links">
-            <a href="/collections/asic-miners" class="filter-link {% if collection.handle == 'asic-miners' %}active{% endif %}">
+            <a href="{% if asic_collection != blank %}{{ asic_collection.url }}{% else %}/collections/all?category=asic-miners{% endif %}" class="filter-link {% if active_category == 'asic-miners' %}active{% endif %}">
               ASIC Miners
             </a>
-            <a href="/collections/power-supplies" class="filter-link {% if collection.handle == 'power-supplies' %}active{% endif %}">
+            <a href="{% if power_collection != blank %}{{ power_collection.url }}{% else %}/collections/all?category=power-supplies{% endif %}" class="filter-link {% if active_category == 'power-supplies' %}active{% endif %}">
               Power Supplies
             </a>
-            <a href="/collections/loki-kits" class="filter-link {% if collection.handle == 'loki-kits' %}active{% endif %}">
+            <a href="{% if loki_collection != blank %}{{ loki_collection.url }}{% else %}/collections/all?category=loki-kits{% endif %}" class="filter-link {% if active_category == 'loki-kits' %}active{% endif %}">
               Loki Kits
             </a>
-            <a href="/collections/accessories" class="filter-link {% if collection.handle == 'accessories' %}active{% endif %}">
+            <a href="{% if accessories_collection != blank %}{{ accessories_collection.url }}{% else %}/collections/all?category=accessories{% endif %}" class="filter-link {% if active_category == 'accessories' %}active{% endif %}">
               Accessories
+            </a>
+            <a href="/collections/all?category=wholesale" class="filter-link {% if active_category == 'wholesale' %}active{% endif %}">
+              Wholesale
             </a>
           </nav>
         </div>
@@ -31,6 +62,9 @@
         <div class="filter-group">
           <h3 class="filter-heading">Sort By</h3>
           <form method="get" action="{{ collection.url }}">
+            {% if request.query_string contains 'category=' and collection.handle == 'all' %}
+              <input type="hidden" name="category" value="{{ active_category }}">
+            {% endif %}
             <select name="sort_by" class="filter-select" onchange="this.form.submit()">
               <option value="manual" {% if collection.sort_by == 'manual' %}selected{% endif %}>Featured</option>
               <option value="best-selling" {% if collection.sort_by == 'best-selling' %}selected{% endif %}>Best Selling</option>
@@ -44,12 +78,100 @@
       </aside>
 
       <div class="collection-main">
-        {% if collection.handle == 'accessories' %}
+        {% assign use_fallback_filter = false %}
+        {% if active_category == 'asic-miners' and collection.handle != 'asic-miners' %}
+          {% assign use_fallback_filter = true %}
+        {% elsif active_category == 'power-supplies' and collection.handle != 'power-supplies' %}
+          {% assign use_fallback_filter = true %}
+        {% elsif active_category == 'loki-kits' and collection.handle != 'loki-kits' %}
+          {% assign use_fallback_filter = true %}
+        {% elsif active_category == 'accessories' and collection.handle != 'accessories' %}
+          {% assign use_fallback_filter = true %}
+        {% endif %}
+
+        {% if active_category == 'wholesale' %}
+          <div class="coming-soon-message glass">
+            <h2>Need Wholesale Quantities?</h2>
+            <p>We supply pallet quantities and large-volume miner deployments. Contact us for wholesale pricing and current inventory.</p>
+            <a href="/pages/contact" class="btn btn-premium">Contact for Wholesale Pricing</a>
+          </div>
+        {% elsif active_category == 'accessories' and collection.handle == 'accessories' and collection.products.size == 0 %}
           <div class="coming-soon-message glass">
             <h2>Accessories Coming Soon</h2>
             <p>We're currently curating a selection of mining accessories including cables, racks, and monitoring tools. Check back soon!</p>
             <a href="/collections/all" class="btn btn-premium">Browse Other Products</a>
           </div>
+        {% elsif use_fallback_filter %}
+          {% assign fallback_match_count = 0 %}
+          <div class="products-grid reveal">
+            {% for product in collections.all.products %}
+              {% assign product_type_downcase = product.type | downcase %}
+              {% assign product_title_downcase = product.title | downcase %}
+              {% assign is_match = false %}
+
+              {% if active_category == 'asic-miners' %}
+                {% if product_type_downcase contains 'asic' or product_title_downcase contains 'antminer' %}
+                  {% assign is_match = true %}
+                {% endif %}
+                {% for tag in product.tags %}
+                  {% assign tag_downcase = tag | downcase %}
+                  {% if tag_downcase contains 'asic' %}
+                    {% assign is_match = true %}
+                  {% endif %}
+                {% endfor %}
+              {% elsif active_category == 'power-supplies' %}
+                {% if product_type_downcase contains 'power' or product_type_downcase contains 'psu' or product_title_downcase contains 'apw12' or product_title_downcase contains 'power supply' %}
+                  {% assign is_match = true %}
+                {% endif %}
+                {% for tag in product.tags %}
+                  {% assign tag_downcase = tag | downcase %}
+                  {% if tag_downcase contains 'power' or tag_downcase contains 'psu' or tag_downcase contains 'apw12' %}
+                    {% assign is_match = true %}
+                  {% endif %}
+                {% endfor %}
+              {% elsif active_category == 'loki-kits' %}
+                {% if product_type_downcase contains 'loki' or product_title_downcase contains 'loki' %}
+                  {% assign is_match = true %}
+                {% endif %}
+                {% for tag in product.tags %}
+                  {% assign tag_downcase = tag | downcase %}
+                  {% if tag_downcase contains 'loki' %}
+                    {% assign is_match = true %}
+                  {% endif %}
+                {% endfor %}
+              {% elsif active_category == 'accessories' %}
+                {% if product_type_downcase contains 'accessor' %}
+                  {% assign is_match = true %}
+                {% endif %}
+                {% for tag in product.tags %}
+                  {% assign tag_downcase = tag | downcase %}
+                  {% if tag_downcase contains 'accessor' %}
+                    {% assign is_match = true %}
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+
+              {% if is_match %}
+                {% assign fallback_match_count = fallback_match_count | plus: 1 %}
+                {% render 'product-card', product: product %}
+              {% endif %}
+            {% endfor %}
+          </div>
+
+          {% if fallback_match_count == 0 %}
+            {% if active_category == 'accessories' %}
+              <div class="coming-soon-message glass">
+                <h2>Accessories Coming Soon</h2>
+                <p>We're currently curating a selection of mining accessories including cables, racks, and monitoring tools. Check back soon!</p>
+                <a href="/collections/all" class="btn btn-premium">Browse Other Products</a>
+              </div>
+            {% else %}
+              <div class="empty-collection glass">
+                <p>No products found in this category yet.</p>
+                <a href="/collections/all" class="btn btn-premium">View All Products</a>
+              </div>
+            {% endif %}
+          {% endif %}
         {% elsif collection.products.size > 0 %}
           <div class="products-grid reveal">
             {% for product in collection.products %}

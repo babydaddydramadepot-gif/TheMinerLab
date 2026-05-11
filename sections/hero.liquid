@@ -2,7 +2,7 @@
   {% if section.settings.image %}
     <div class="hero-bg-image" style="background-image: url({{ section.settings.image | img_url: '1920x1080' }});"></div>
   {% else %}
-    <div class="hero-bg-image hero-bg-fallback"></div>
+    <div class="hero-bg-image hero-bg-fallback" style="background-image: url({{ 'hero-mining.jpg' | asset_url }});"></div>
   {% endif %}
   <div class="hero-overlay-gradient"></div>
   <div class="hero-grid-bg grid-bg"></div>
