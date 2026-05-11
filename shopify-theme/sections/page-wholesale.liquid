@@ -1,0 +1,201 @@
+<section class="wholesale-page section-spacing">
+  <div class="container">
+    <div class="wholesale-hero reveal">
+      <span class="section-eyebrow">Wholesale</span>
+      <h1 class="wholesale-title">Pallet quantities, facility-ready hardware.</h1>
+      <p class="wholesale-subtitle">
+        Volume pricing for facility-scale deployments. Surplus inventory available for immediate shipment.
+      </p>
+    </div>
+
+    <div class="wholesale-inventory reveal">
+      <h2 class="wholesale-section-title">Current Inventory</h2>
+      <div class="wholesale-grid">
+        <div class="wholesale-item glass">
+          <h3 class="wholesale-item-model">Antminer S19 Pro</h3>
+          <div class="wholesale-item-spec">110 TH/s · 3250W</div>
+          <div class="wholesale-item-stock">In Stock</div>
+          <div class="wholesale-item-qty">Pallet quantities available</div>
+        </div>
+
+        <div class="wholesale-item glass">
+          <h3 class="wholesale-item-model">Antminer S19 XP</h3>
+          <div class="wholesale-item-spec">140 TH/s · 3010W</div>
+          <div class="wholesale-item-stock">In Stock</div>
+          <div class="wholesale-item-qty">Pallet quantities available</div>
+        </div>
+
+        <div class="wholesale-item glass">
+          <h3 class="wholesale-item-model">Antminer S19j Pro</h3>
+          <div class="wholesale-item-spec">100 TH/s · 3050W</div>
+          <div class="wholesale-item-stock">In Stock</div>
+          <div class="wholesale-item-qty">Pallet quantities available</div>
+        </div>
+
+        <div class="wholesale-item glass">
+          <h3 class="wholesale-item-model">Antminer S17 Pro</h3>
+          <div class="wholesale-item-spec">53 TH/s · 2094W</div>
+          <div class="wholesale-item-stock">Limited Stock</div>
+          <div class="wholesale-item-qty">10+ units available</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wholesale-benefits reveal">
+      <h2 class="wholesale-section-title">Wholesale Benefits</h2>
+      <div class="wholesale-benefits-grid">
+        <div class="wholesale-benefit glass">
+          <div class="wholesale-benefit-icon">
+            {% render 'icon-package' %}
+          </div>
+          <h3 class="wholesale-benefit-title">Volume Pricing</h3>
+          <p class="wholesale-benefit-text">
+            Best pricing on orders of 10+ units. Pallet rates for 40-50 unit orders.
+          </p>
+        </div>
+
+        <div class="wholesale-benefit glass">
+          <div class="wholesale-benefit-icon">
+            {% render 'icon-shield' %}
+          </div>
+          <h3 class="wholesale-benefit-title">100% Tested</h3>
+          <p class="wholesale-benefit-text">
+            Every unit tested and benchmarked. Documentation included with each pallet.
+          </p>
+        </div>
+
+        <div class="wholesale-benefit glass">
+          <div class="wholesale-benefit-icon">
+            {% render 'icon-wrench' %}
+          </div>
+          <h3 class="wholesale-benefit-title">Deployment Support</h3>
+          <p class="wholesale-benefit-text">
+            Engineering support for facility deployments. Firmware configuration included.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="wholesale-form-section reveal">
+      <div class="wholesale-form-header">
+        <h2 class="wholesale-section-title">Request Wholesale Quote</h2>
+        <p class="wholesale-form-subtitle">
+          Fill out this form and our sales team will respond within 4 hours with custom pricing.
+        </p>
+      </div>
+
+      <div class="wholesale-form-wrapper glass">
+        {% form 'contact' %}
+          <input type="hidden" name="contact[tags]" value="wholesale-quote">
+
+          {% if form.posted_successfully? %}
+            <div class="form-success">
+              <h3>Quote Request Received!</h3>
+              <p>Our sales team will contact you within 4 hours with custom wholesale pricing.</p>
+            </div>
+          {% endif %}
+
+          {% if form.errors %}
+            <div class="form-errors">
+              <p>Please correct the errors below:</p>
+              {{ form.errors | default_errors }}
+            </div>
+          {% endif %}
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="WholesaleName">Name *</label>
+              <input 
+                type="text" 
+                id="WholesaleName" 
+                name="contact[name]" 
+                required
+                class="form-input"
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="WholesaleCompany">Company</label>
+              <input 
+                type="text" 
+                id="WholesaleCompany" 
+                name="contact[company]" 
+                class="form-input"
+              >
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="WholesaleEmail">Email *</label>
+              <input 
+                type="email" 
+                id="WholesaleEmail" 
+                name="contact[email]" 
+                required
+                class="form-input"
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="WholesalePhone">Phone</label>
+              <input 
+                type="tel" 
+                id="WholesalePhone" 
+                name="contact[phone]" 
+                class="form-input"
+              >
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="WholesaleProduct">Product *</label>
+              <select id="WholesaleProduct" name="contact[product]" required class="form-select">
+                <option value="">Select a product</option>
+                <option value="s19-pro">Antminer S19 Pro 110TH</option>
+                <option value="s19-xp">Antminer S19 XP 140TH</option>
+                <option value="s19j-pro">Antminer S19j Pro 100TH</option>
+                <option value="s17-pro">Antminer S17 Pro 53TH</option>
+                <option value="mixed">Mixed pallet</option>
+                <option value="custom">Custom configuration</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="WholesaleQuantity">Quantity / Pallets *</label>
+              <input 
+                type="text" 
+                id="WholesaleQuantity" 
+                name="contact[quantity]" 
+                placeholder="e.g. 20 units or 1 pallet"
+                required
+                class="form-input"
+              >
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="WholesaleMessage">Additional Details</label>
+            <textarea 
+              id="WholesaleMessage" 
+              name="contact[body]" 
+              rows="4" 
+              placeholder="Firmware preferences, shipping timeline, or other requirements..."
+              class="form-textarea"
+            ></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-premium">Request Quote</button>
+        {% endform %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Wholesale",
+  "settings": []
+}
+{% endschema %}

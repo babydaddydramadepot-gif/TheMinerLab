@@ -1,0 +1,116 @@
+<section class="hero-section">
+  {% if section.settings.image %}
+    <div class="hero-bg-image" style="background-image: url({{ section.settings.image | img_url: '1920x1080' }});"></div>
+  {% else %}
+    <div class="hero-bg-image hero-bg-fallback"></div>
+  {% endif %}
+  <div class="hero-overlay-gradient"></div>
+  <div class="hero-grid-bg grid-bg"></div>
+  
+  <div class="hero-glow-orb hero-glow-1 animate-breathe"></div>
+  <div class="hero-glow-orb hero-glow-2 animate-breathe" style="animation-delay: 2s;"></div>
+  
+  <div class="hero-container container">
+    <div class="hero-content reveal">
+      <div class="hero-badge glass">
+        <span class="badge-dot"></span>
+        Surplus Inventory &middot; Tested &middot; Ready to Deploy
+      </div>
+
+      <h1 class="hero-heading animate-rise">
+        {% if section.settings.heading != blank %}
+          {{ section.settings.heading }}
+        {% else %}
+          Premium <span class="text-gradient glow-text">Crypto Mining</span> Hardware
+        {% endif %}
+      </h1>
+
+      <p class="hero-subtext animate-rise">
+        {{ section.settings.subtext | default: 'Tested surplus ASIC miners, tuned systems, and mining infrastructure built for serious miners.' }}
+      </p>
+
+      <div class="hero-cta-buttons animate-rise">
+        <a href="{{ section.settings.cta_primary_url | default: '/collections/all' }}" class="btn btn-premium light-sweep">
+          {{ section.settings.cta_primary_label | default: 'Shop Miners' }}
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8H13M9 4L13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="{{ section.settings.cta_secondary_url | default: '/pages/wholesale' }}" class="btn btn-secondary">
+          {{ section.settings.cta_secondary_label | default: 'Get Wholesale Pricing' }}
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-stats-strip">
+    <div class="container hero-stats">
+      <div class="hero-stat reveal">
+        <div class="hero-stat-value">1.2K+</div>
+        <div class="hero-stat-label">Miners deployed</div>
+      </div>
+      <div class="hero-stat reveal">
+        <div class="hero-stat-value">100%</div>
+        <div class="hero-stat-label">Tested before ship</div>
+      </div>
+      <div class="hero-stat reveal">
+        <div class="hero-stat-value">48hr</div>
+        <div class="hero-stat-label">Average freight</div>
+      </div>
+      <div class="hero-stat reveal">
+        <div class="hero-stat-value">24/7</div>
+        <div class="hero-stat-label">Engineer support</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Premium Crypto Mining Hardware"
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Subtext",
+      "default": "Tested surplus ASIC miners, tuned systems, and mining infrastructure built for serious miners."
+    },
+    {
+      "type": "text",
+      "id": "cta_primary_label",
+      "label": "Primary CTA",
+      "default": "Shop Miners"
+    },
+    {
+      "type": "url",
+      "id": "cta_primary_url",
+      "label": "Primary CTA URL"
+    },
+    {
+      "type": "text",
+      "id": "cta_secondary_label",
+      "label": "Secondary CTA",
+      "default": "Get Wholesale Pricing"
+    },
+    {
+      "type": "url",
+      "id": "cta_secondary_url",
+      "label": "Secondary CTA URL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero"
+    }
+  ]
+}
+{% endschema %}

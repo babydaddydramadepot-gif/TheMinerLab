@@ -1,0 +1,99 @@
+<section class="about-page section-spacing">
+  <div class="container">
+    <div class="about-hero reveal">
+      <div class="about-content">
+        <span class="section-eyebrow">About Us</span>
+        <h1 class="about-title">USA-Based Mining Hardware You Can Trust</h1>
+        <p class="about-text">
+          The Miner Lab sources, tests, and deploys premium surplus ASIC miners for serious Bitcoin miners. Every unit is benchmarked, validated, and ready to hash.
+        </p>
+        <p class="about-text">
+          We're engineers and miners ourselves — we know what works because we deploy this hardware in our own operations.
+        </p>
+      </div>
+      {% if section.settings.image %}
+        <div class="about-image">
+          <img src="{{ section.settings.image | img_url: '800x800' }}" alt="The Miner Lab facility">
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="about-stats reveal">
+      <div class="about-stat glass">
+        <div class="about-stat-value">100%</div>
+        <div class="about-stat-label">Hardware tested</div>
+      </div>
+      <div class="about-stat glass">
+        <div class="about-stat-value">1.2K+</div>
+        <div class="about-stat-label">Miners deployed</div>
+      </div>
+      <div class="about-stat glass">
+        <div class="about-stat-value">USA</div>
+        <div class="about-stat-label">Domestic shipping</div>
+      </div>
+      <div class="about-stat glass">
+        <div class="about-stat-value">Pallets</div>
+        <div class="about-stat-label">Wholesale stock</div>
+      </div>
+    </div>
+
+    <div class="about-cards reveal">
+      <div class="about-card glass">
+        <h3 class="about-card-title">Verified Surplus Sources</h3>
+        <p class="about-card-text">
+          We maintain relationships with verified surplus channels to source genuine manufacturer equipment at competitive pricing.
+        </p>
+      </div>
+
+      <div class="about-card glass">
+        <h3 class="about-card-title">Tested & Benchmarked</h3>
+        <p class="about-card-text">
+          Every miner undergoes 24-hour burn-in testing with full hashrate validation and thermal benchmarking before shipment.
+        </p>
+      </div>
+
+      <div class="about-card glass">
+        <h3 class="about-card-title">Engineer Support</h3>
+        <p class="about-card-text">
+          Direct access to mining engineers who deploy this equipment. Real technical support from people who understand the hardware.
+        </p>
+      </div>
+
+      <div class="about-card glass">
+        <h3 class="about-card-title">Wholesale Available</h3>
+        <p class="about-card-text">
+          Pallet quantities for facility-scale deployments. Volume pricing and custom configurations available for serious operations.
+        </p>
+      </div>
+    </div>
+
+    <div class="about-cta reveal">
+      <div class="about-cta-card glass">
+        <h2>Ready to start mining?</h2>
+        <p>Browse our tested surplus inventory or request a wholesale quote for facility deployments.</p>
+        <div class="about-cta-buttons">
+          <a href="/collections/all" class="btn btn-premium">Shop Miners</a>
+          <a href="/pages/wholesale" class="btn btn-secondary">Wholesale Quote</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "About image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "About"
+    }
+  ]
+}
+{% endschema %}

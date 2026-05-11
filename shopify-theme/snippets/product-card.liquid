@@ -1,0 +1,77 @@
+{% comment %}
+  Renders a product card
+
+  Accepts:
+  - product: {Object} Product object
+
+  Usage:
+  {% render 'product-card', product: product %}
+{% endcomment %}
+
+{% assign hashrate = '' %}
+{% assign efficiency = '' %}
+{% assign algo = '' %}
+{% for tag in product.tags %}
+  {% if tag contains 'hashrate:' %}
+    {% assign hashrate = tag | remove: 'hashrate:' %}
+  {% endif %}
+  {% if tag contains 'efficiency:' %}
+    {% assign efficiency = tag | remove: 'efficiency:' %}
+  {% endif %}
+  {% if tag contains 'algo:' %}
+    {% assign algo = tag | remove: 'algo:' %}
+  {% endif %}
+{% endfor %}
+
+{% assign spec_line = '' %}
+{% if hashrate != '' and efficiency != '' %}
+  {% assign spec_line = hashrate | append: ' · ' | append: efficiency %}
+{% elsif hashrate != '' %}
+  {% assign spec_line = hashrate %}
+{% elsif product.type != '' %}
+  {% assign spec_line = product.type %}
+{% endif %}
+
+<a href="{{ product.url }}" class="prod-card">
+  <div class="prod-card-img">
+    <div class="grid-bg"></div>
+    {% if product.featured_image %}
+      <img
+        src="{{ product.featured_image | img_url: '600x600' }}"
+        alt="{{ product.featured_image.alt | default: product.title | escape }}"
+        loading="lazy"
+        width="600"
+        height="600"
+      >
+    {% else %}
+      <div style="display:flex;align-items:center;justify-content:center;height:100%;opacity:0.15;">
+        {% render 'icon-cpu' %}
+      </div>
+    {% endif %}
+    <div class="prod-card-badges">
+      {% if product.type != blank %}
+        <span class="prod-badge prod-badge-type">{{ product.type }}</span>
+      {% else %}
+        <span></span>
+      {% endif %}
+      <span class="prod-badge prod-badge-tested">Tested Surplus</span>
+    </div>
+  </div>
+
+  <div class="prod-card-body">
+    <h3 class="prod-card-name">{{ product.title }}</h3>
+    {% if spec_line != '' %}
+      <p class="prod-card-spec">{{ spec_line }}</p>
+    {% endif %}
+    <div class="prod-card-footer">
+      <div>
+        <p class="prod-card-from">From</p>
+        <p class="prod-card-price">{{ product.price_min | money }}</p>
+      </div>
+      <span class="prod-card-cta">
+        View Product
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true" style="display:inline;vertical-align:middle;margin-left:2px;"><path d="M3 8H13M9 4L13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+    </div>
+  </div>
+</a>
