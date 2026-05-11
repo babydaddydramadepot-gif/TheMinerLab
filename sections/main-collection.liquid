@@ -114,7 +114,7 @@
           <div class="coming-soon-message glass">
             <h2>Need Wholesale Quantities?</h2>
             <p>We supply pallet quantities and large-volume miner deployments. Contact us for wholesale pricing and current inventory.</p>
-            <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem;">
+            <div class="wholesale-cta-buttons">
               <a href="/pages/wholesale" class="btn btn-premium">Request Wholesale Pricing</a>
               <a href="/pages/contact" class="btn btn-secondary">Contact Sales</a>
             </div>
@@ -207,7 +207,7 @@
           {% else %}
             <div class="empty-collection glass" id="HashrateEmptyMsg" hidden>
               <p>No products match this hashrate filter.</p>
-              <button type="button" class="btn btn-premium" onclick="document.querySelector('[data-hashrate=\'all\']').click()">Show All Hashrates</button>
+              <button type="button" class="btn btn-premium" data-reset-hashrate>Show All Hashrates</button>
             </div>
           {% endif %}
 
@@ -241,7 +241,7 @@
 
           <div class="empty-collection glass" id="HashrateEmptyMsg" hidden>
             <p>No products match this hashrate filter.</p>
-            <button type="button" class="btn btn-premium" onclick="document.querySelector('[data-hashrate=\'all\']').click()">Show All Hashrates</button>
+            <button type="button" class="btn btn-premium" data-reset-hashrate>Show All Hashrates</button>
           </div>
 
           {% if paginate.pages > 1 %}

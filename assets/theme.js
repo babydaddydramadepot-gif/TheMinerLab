@@ -500,42 +500,49 @@ document.addEventListener('DOMContentLoaded', () => {
   const productItems = document.querySelectorAll('.product-filter-item');
   const emptyMsg = document.getElementById('HashrateEmptyMsg');
   const productsGrid = document.getElementById('ProductsGrid');
+  const resetButtons = document.querySelectorAll('[data-reset-hashrate]');
 
   if (hashrateButtons.length === 0) return;
 
-  hashrateButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      // Update active state on buttons
-      hashrateButtons.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+  function applyHashrateFilter(selectedHashrate) {
+    hashrateButtons.forEach(b => b.classList.remove('active'));
+    const activeBtn = document.querySelector(`#HashrateFilters [data-hashrate="${selectedHashrate}"]`);
+    if (activeBtn) activeBtn.classList.add('active');
 
-      const selectedHashrate = btn.dataset.hashrate;
-      let visibleCount = 0;
+    let visibleCount = 0;
 
-      productItems.forEach(item => {
-        if (selectedHashrate === 'all') {
+    productItems.forEach(item => {
+      if (selectedHashrate === 'all') {
+        item.classList.remove('filtered-out');
+        visibleCount++;
+      } else {
+        const itemHashrates = (item.dataset.hashrates || '').toUpperCase();
+        if (itemHashrates.includes(selectedHashrate.toUpperCase())) {
           item.classList.remove('filtered-out');
           visibleCount++;
         } else {
-          const itemHashrates = (item.dataset.hashrates || '').toUpperCase();
-          if (itemHashrates.includes(selectedHashrate.toUpperCase())) {
-            item.classList.remove('filtered-out');
-            visibleCount++;
-          } else {
-            item.classList.add('filtered-out');
-          }
+          item.classList.add('filtered-out');
         }
-      });
-
-      // Toggle empty state message
-      if (emptyMsg) {
-        emptyMsg.hidden = visibleCount > 0;
       }
+    });
 
-      // Toggle grid visibility
-      if (productsGrid) {
-        productsGrid.style.display = visibleCount === 0 ? 'none' : '';
-      }
+    if (emptyMsg) {
+      emptyMsg.hidden = visibleCount > 0;
+    }
+    if (productsGrid) {
+      productsGrid.style.display = visibleCount === 0 ? 'none' : '';
+    }
+  }
+
+  hashrateButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      applyHashrateFilter(btn.dataset.hashrate);
+    });
+  });
+
+  resetButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      applyHashrateFilter('all');
     });
   });
 });

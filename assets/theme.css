@@ -2277,6 +2277,22 @@ p {
   display: none;
 }
 
+/* Wholesale CTA button group inside collection page */
+.wholesale-cta-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+
+/* Inline link inside FAQ answer text */
+.faq-link {
+  color: var(--primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .coming-soon-message,
 .empty-collection {
   text-align: center;
