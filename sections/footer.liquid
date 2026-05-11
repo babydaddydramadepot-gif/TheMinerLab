@@ -1,4 +1,8 @@
 <footer class="site-footer">
+  {% assign asic_collection = collections['asic-miners'] %}
+  {% assign power_collection = collections['power-supplies'] %}
+  {% assign loki_collection = collections['loki-kits'] %}
+  {% assign accessories_collection = collections['accessories'] %}
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
@@ -9,7 +13,7 @@
         <p style="font-size:0.875rem;line-height:1.6;max-width:280px;">
           Tested ASIC miners, tuned systems and mining infrastructure built for serious operators. USA-based shipping, quality guaranteed.
         </p>
-        <form class="footer-newsletter" action="/contact#newsletter" method="post">
+        <form class="footer-newsletter" action="/pages/contact#newsletter" method="post">
           <input
             type="email"
             name="contact[email]"
@@ -27,10 +31,10 @@
         <h4>Shop</h4>
         <ul>
           <li><a href="/collections/all">All Products</a></li>
-          <li><a href="/collections/asic-miners">ASIC Miners</a></li>
-          <li><a href="/collections/power-supplies">Power Supplies</a></li>
-          <li><a href="/collections/loki-kits">Loki Kits</a></li>
-          <li><a href="/collections/accessories">Accessories</a></li>
+          <li><a href="{% if asic_collection != blank %}{{ asic_collection.url }}{% else %}/collections/all?category=asic-miners{% endif %}">ASIC Miners</a></li>
+          <li><a href="{% if power_collection != blank %}{{ power_collection.url }}{% else %}/collections/all?category=power-supplies{% endif %}">Power Supplies</a></li>
+          <li><a href="{% if loki_collection != blank %}{{ loki_collection.url }}{% else %}/collections/all?category=loki-kits{% endif %}">Loki Kits</a></li>
+          <li><a href="{% if accessories_collection != blank %}{{ accessories_collection.url }}{% else %}/collections/all?category=accessories{% endif %}">Accessories</a></li>
         </ul>
       </div>
 

@@ -1,4 +1,8 @@
 <section class="categories-section section-spacing">
+  {% assign asic_collection = collections['asic-miners'] %}
+  {% assign power_collection = collections['power-supplies'] %}
+  {% assign loki_collection = collections['loki-kits'] %}
+  {% assign accessories_collection = collections['accessories'] %}
   <div class="container">
     <div class="section-header reveal">
       <span class="section-eyebrow">Catalog</span>
@@ -6,7 +10,7 @@
     </div>
 
     <div class="categories-grid reveal">
-      <a href="/collections/asic-miners" class="category-card gradient-border">
+      <a href="{% if asic_collection != blank %}{{ asic_collection.url }}{% else %}/collections/all?category=asic-miners{% endif %}" class="category-card gradient-border">
         <div class="category-icon">
           {% render 'icon-cpu' %}
         </div>
@@ -19,7 +23,7 @@
         </div>
       </a>
 
-      <a href="/collections/power-supplies" class="category-card gradient-border">
+      <a href="{% if power_collection != blank %}{{ power_collection.url }}{% else %}/collections/all?category=power-supplies{% endif %}" class="category-card gradient-border">
         <div class="category-icon">
           {% render 'icon-zap' %}
         </div>
@@ -32,7 +36,7 @@
         </div>
       </a>
 
-      <a href="/collections/loki-kits" class="category-card gradient-border">
+      <a href="{% if loki_collection != blank %}{{ loki_collection.url }}{% else %}/collections/all?category=loki-kits{% endif %}" class="category-card gradient-border">
         <div class="category-icon">
           {% render 'icon-package' %}
         </div>
@@ -45,7 +49,7 @@
         </div>
       </a>
 
-      <a href="/collections/accessories" class="category-card gradient-border">
+      <a href="{% if accessories_collection != blank %}{{ accessories_collection.url }}{% else %}/collections/all?category=accessories{% endif %}" class="category-card gradient-border">
         <div class="category-icon">
           {% render 'icon-settings' %}
         </div>
