@@ -493,6 +493,54 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ===================================
+// Hashrate Filter (Collection Page)
+// ===================================
+document.addEventListener('DOMContentLoaded', () => {
+  const hashrateButtons = document.querySelectorAll('#HashrateFilters [data-hashrate]');
+  const productItems = document.querySelectorAll('.product-filter-item');
+  const emptyMsg = document.getElementById('HashrateEmptyMsg');
+  const productsGrid = document.getElementById('ProductsGrid');
+
+  if (hashrateButtons.length === 0) return;
+
+  hashrateButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Update active state on buttons
+      hashrateButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const selectedHashrate = btn.dataset.hashrate;
+      let visibleCount = 0;
+
+      productItems.forEach(item => {
+        if (selectedHashrate === 'all') {
+          item.classList.remove('filtered-out');
+          visibleCount++;
+        } else {
+          const itemHashrates = (item.dataset.hashrates || '').toUpperCase();
+          if (itemHashrates.includes(selectedHashrate.toUpperCase())) {
+            item.classList.remove('filtered-out');
+            visibleCount++;
+          } else {
+            item.classList.add('filtered-out');
+          }
+        }
+      });
+
+      // Toggle empty state message
+      if (emptyMsg) {
+        emptyMsg.hidden = visibleCount > 0;
+      }
+
+      // Toggle grid visibility
+      if (productsGrid) {
+        productsGrid.style.display = visibleCount === 0 ? 'none' : '';
+      }
+    });
+  });
+});
+
+// ===================================
 // Console Branding (Easter Egg)
 // ===================================
 console.log('%c🔧 The Miner Lab', 'font-size: 20px; font-weight: bold; color: #4dd4e8;');
