@@ -1562,7 +1562,7 @@ p {
   color: var(--muted);
   transition: color 0.3s ease;
   white-space: normal;
-  text-align: right;
+  text-align: left;
   margin-left: auto;
 }
 
