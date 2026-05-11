@@ -493,6 +493,61 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ===================================
+// Hashrate Filter (Collection Page)
+// ===================================
+document.addEventListener('DOMContentLoaded', () => {
+  const hashrateButtons = document.querySelectorAll('#HashrateFilters [data-hashrate]');
+  const productItems = document.querySelectorAll('.product-filter-item');
+  const emptyMsg = document.getElementById('HashrateEmptyMsg');
+  const productsGrid = document.getElementById('ProductsGrid');
+  const resetButtons = document.querySelectorAll('[data-reset-hashrate]');
+
+  if (hashrateButtons.length === 0) return;
+
+  function applyHashrateFilter(selectedHashrate) {
+    hashrateButtons.forEach(b => b.classList.remove('active'));
+    const activeBtn = document.querySelector(`#HashrateFilters [data-hashrate="${selectedHashrate}"]`);
+    if (activeBtn) activeBtn.classList.add('active');
+
+    let visibleCount = 0;
+
+    productItems.forEach(item => {
+      if (selectedHashrate === 'all') {
+        item.classList.remove('filtered-out');
+        visibleCount++;
+      } else {
+        const itemHashrates = (item.dataset.hashrates || '').toUpperCase();
+        if (itemHashrates.includes(selectedHashrate.toUpperCase())) {
+          item.classList.remove('filtered-out');
+          visibleCount++;
+        } else {
+          item.classList.add('filtered-out');
+        }
+      }
+    });
+
+    if (emptyMsg) {
+      emptyMsg.hidden = visibleCount > 0;
+    }
+    if (productsGrid) {
+      productsGrid.style.display = visibleCount === 0 ? 'none' : '';
+    }
+  }
+
+  hashrateButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      applyHashrateFilter(btn.dataset.hashrate);
+    });
+  });
+
+  resetButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      applyHashrateFilter('all');
+    });
+  });
+});
+
+// ===================================
 // Console Branding (Easter Egg)
 // ===================================
 console.log('%c🔧 The Miner Lab', 'font-size: 20px; font-weight: bold; color: #4dd4e8;');

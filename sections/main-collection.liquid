@@ -13,25 +13,38 @@
   {% endfor %}
 {% endif %}
 
-{% assign active_category_title = collection.title %}
-{% if active_category == 'asic-miners' %}
-  {% assign active_category_title = 'ASIC Miners' %}
-{% elsif active_category == 'power-supplies' %}
-  {% assign active_category_title = 'Power Supplies' %}
-{% elsif active_category == 'loki-kits' %}
-  {% assign active_category_title = 'Loki Kits' %}
-{% elsif active_category == 'accessories' %}
-  {% assign active_category_title = 'Accessories' %}
-{% elsif active_category == 'wholesale' %}
-  {% assign active_category_title = 'Wholesale' %}
+{% case active_category %}
+  {% when 'asic-miners' %}
+    {% assign active_category_title = 'ASIC Miners' %}
+  {% when 'power-supplies' %}
+    {% assign active_category_title = 'Power Supplies' %}
+  {% when 'loki-kits' %}
+    {% assign active_category_title = 'Loki Kits' %}
+  {% when 'accessories' %}
+    {% assign active_category_title = 'Accessories' %}
+  {% when 'wholesale' %}
+    {% assign active_category_title = 'Wholesale' %}
+  {% else %}
+    {% assign active_category_title = collection.title | default: 'All Products' %}
+{% endcase %}
+
+{% assign use_fallback_filter = false %}
+{% if active_category == 'asic-miners' and collection.handle != 'asic-miners' %}
+  {% assign use_fallback_filter = true %}
+{% elsif active_category == 'power-supplies' and collection.handle != 'power-supplies' %}
+  {% assign use_fallback_filter = true %}
+{% elsif active_category == 'loki-kits' and collection.handle != 'loki-kits' %}
+  {% assign use_fallback_filter = true %}
+{% elsif active_category == 'accessories' and collection.handle != 'accessories' %}
+  {% assign use_fallback_filter = true %}
 {% endif %}
 
-{% paginate collection.products by 12 %}
+{% paginate collection.products by 50 %}
 <section class="collection-page section-spacing">
   <div class="container">
     <div class="collection-header reveal">
       <h1 class="collection-title">{{ active_category_title }}</h1>
-      {% if collection.description != blank %}
+      {% if collection.description != blank and active_category == collection.handle %}
         <div class="collection-description">{{ collection.description }}</div>
       {% endif %}
     </div>
@@ -41,6 +54,9 @@
         <div class="filter-group">
           <h3 class="filter-heading">Categories</h3>
           <nav class="filter-links">
+            <a href="/collections/all" class="filter-link {% if active_category == 'all' %}active{% endif %}">
+              All Products
+            </a>
             <a href="{% if asic_collection != blank %}{{ asic_collection.url }}{% else %}/collections/all?category=asic-miners{% endif %}" class="filter-link {% if active_category == 'asic-miners' %}active{% endif %}">
               ASIC Miners
             </a>
@@ -59,93 +75,96 @@
           </nav>
         </div>
 
+        <div class="filter-group" id="HashrateFilterGroup" {% unless active_category == 'asic-miners' %}hidden{% endunless %}>
+          <h3 class="filter-heading">Hashrate</h3>
+          <nav class="filter-links" id="HashrateFilters">
+            <button type="button" class="filter-link filter-btn active" data-hashrate="all">Any</button>
+            <button type="button" class="filter-link filter-btn" data-hashrate="88TH">88 TH/s</button>
+            <button type="button" class="filter-link filter-btn" data-hashrate="92TH">92 TH/s</button>
+            <button type="button" class="filter-link filter-btn" data-hashrate="96TH">96 TH/s</button>
+            <button type="button" class="filter-link filter-btn" data-hashrate="100TH">100 TH/s</button>
+            <button type="button" class="filter-link filter-btn" data-hashrate="104TH">104 TH/s</button>
+            <button type="button" class="filter-link filter-btn" data-hashrate="105TH">105 TH/s</button>
+            <button type="button" class="filter-link filter-btn" data-hashrate="110TH">110 TH/s</button>
+            <button type="button" class="filter-link filter-btn" data-hashrate="140TH">140 TH/s</button>
+          </nav>
+        </div>
+
         <div class="filter-group">
           <h3 class="filter-heading">Sort By</h3>
           <form method="get" action="{{ collection.url }}">
-            {% if request.query_string contains 'category=' and collection.handle == 'all' %}
+            {% if active_category != collection.handle and active_category != '' and active_category != 'all' %}
               <input type="hidden" name="category" value="{{ active_category }}">
             {% endif %}
             <select name="sort_by" class="filter-select" onchange="this.form.submit()">
               <option value="manual" {% if collection.sort_by == 'manual' %}selected{% endif %}>Featured</option>
-              <option value="best-selling" {% if collection.sort_by == 'best-selling' %}selected{% endif %}>Best Selling</option>
-              <option value="title-ascending" {% if collection.sort_by == 'title-ascending' %}selected{% endif %}>A-Z</option>
-              <option value="title-descending" {% if collection.sort_by == 'title-descending' %}selected{% endif %}>Z-A</option>
               <option value="price-ascending" {% if collection.sort_by == 'price-ascending' %}selected{% endif %}>Price: Low to High</option>
               <option value="price-descending" {% if collection.sort_by == 'price-descending' %}selected{% endif %}>Price: High to Low</option>
+              <option value="title-ascending" {% if collection.sort_by == 'title-ascending' %}selected{% endif %}>Name A–Z</option>
+              <option value="title-descending" {% if collection.sort_by == 'title-descending' %}selected{% endif %}>Name Z–A</option>
+              <option value="best-selling" {% if collection.sort_by == 'best-selling' %}selected{% endif %}>Best Selling</option>
             </select>
           </form>
         </div>
       </aside>
 
       <div class="collection-main">
-        {% assign use_fallback_filter = false %}
-        {% if active_category == 'asic-miners' and collection.handle != 'asic-miners' %}
-          {% assign use_fallback_filter = true %}
-        {% elsif active_category == 'power-supplies' and collection.handle != 'power-supplies' %}
-          {% assign use_fallback_filter = true %}
-        {% elsif active_category == 'loki-kits' and collection.handle != 'loki-kits' %}
-          {% assign use_fallback_filter = true %}
-        {% elsif active_category == 'accessories' and collection.handle != 'accessories' %}
-          {% assign use_fallback_filter = true %}
-        {% endif %}
 
         {% if active_category == 'wholesale' %}
           <div class="coming-soon-message glass">
             <h2>Need Wholesale Quantities?</h2>
             <p>We supply pallet quantities and large-volume miner deployments. Contact us for wholesale pricing and current inventory.</p>
-            <a href="/pages/contact" class="btn btn-premium">Contact for Wholesale Pricing</a>
+            <div class="wholesale-cta-buttons">
+              <a href="/pages/wholesale" class="btn btn-premium">Request Wholesale Pricing</a>
+              <a href="/pages/contact" class="btn btn-secondary">Contact Sales</a>
+            </div>
           </div>
-        {% elsif active_category == 'accessories' and collection.handle == 'accessories' and collection.products.size == 0 %}
-          <div class="coming-soon-message glass">
-            <h2>Accessories Coming Soon</h2>
-            <p>We're currently curating a selection of mining accessories including cables, racks, and monitoring tools. Check back soon!</p>
-            <a href="/collections/all" class="btn btn-premium">Browse Other Products</a>
-          </div>
+
         {% elsif use_fallback_filter %}
           {% assign fallback_match_count = 0 %}
-          <div class="products-grid reveal">
-            {% for product in collections.all.products limit: 12 %}
-              {% assign product_type_downcase = product.type | downcase %}
-              {% assign product_title_downcase = product.title | downcase %}
+          <div class="products-grid reveal" id="ProductsGrid">
+            {% for product in collections.all.products limit: 50 %}
+              {% assign product_type_lower = product.type | downcase %}
+              {% assign product_title_lower = product.title | downcase %}
               {% assign is_match = false %}
 
               {% if active_category == 'asic-miners' %}
-                {% if product_type_downcase contains 'asic' or product_title_downcase contains 'antminer' %}
+                {% if product_type_lower contains 'asic' or product_title_lower contains 'antminer' or product_title_lower contains 'miner' %}
                   {% assign is_match = true %}
                 {% endif %}
                 {% for tag in product.tags %}
-                  {% assign tag_downcase = tag | downcase %}
-                  {% if tag_downcase contains 'asic' %}
+                  {% assign tag_lower = tag | downcase %}
+                  {% if tag_lower contains 'asic' or tag_lower contains 'miner' %}
                     {% assign is_match = true %}
                   {% endif %}
                 {% endfor %}
               {% elsif active_category == 'power-supplies' %}
-                {% if product_type_downcase contains 'power' or product_type_downcase contains 'psu' or product_title_downcase contains 'apw12' or product_title_downcase contains 'power supply' %}
+                {% if product_type_lower contains 'power' or product_type_lower contains 'psu' or product_title_lower contains 'apw12' or product_title_lower contains 'power supply' %}
                   {% assign is_match = true %}
                 {% endif %}
                 {% for tag in product.tags %}
-                  {% assign tag_downcase = tag | downcase %}
-                  {% if tag_downcase contains 'power' or tag_downcase contains 'psu' or tag_downcase contains 'apw12' %}
+                  {% assign tag_lower = tag | downcase %}
+                  {% if tag_lower contains 'power' or tag_lower contains 'psu' or tag_lower contains 'apw12' %}
                     {% assign is_match = true %}
                   {% endif %}
                 {% endfor %}
               {% elsif active_category == 'loki-kits' %}
-                {% if product_type_downcase contains 'loki' or product_title_downcase contains 'loki' %}
+                {% if product_type_lower contains 'loki' or product_title_lower contains 'loki' %}
                   {% assign is_match = true %}
                 {% endif %}
                 {% for tag in product.tags %}
-                  {% assign tag_downcase = tag | downcase %}
-                  {% if tag_downcase contains 'loki' %}
+                  {% assign tag_lower = tag | downcase %}
+                  {% if tag_lower contains 'loki' %}
                     {% assign is_match = true %}
                   {% endif %}
                 {% endfor %}
               {% elsif active_category == 'accessories' %}
-                {% if product_type_downcase contains 'accessor' %}
+                {% if product_type_lower contains 'accessor' %}
                   {% assign is_match = true %}
                 {% endif %}
                 {% for tag in product.tags %}
-                  {% assign tag_downcase = tag | downcase %}
-                  {% if tag_downcase contains 'accessor' %}
+                  {% assign tag_lower = tag | downcase %}
+                  {% if tag_lower contains 'accessor' %}
                     {% assign is_match = true %}
                   {% endif %}
                 {% endfor %}
@@ -153,7 +172,21 @@
 
               {% if is_match %}
                 {% assign fallback_match_count = fallback_match_count | plus: 1 %}
-                {% render 'product-card', product: product %}
+                {% assign product_hashrates = '' %}
+                {% for tag in product.tags %}
+                  {% if tag contains 'hashrate:' %}
+                    {% assign hr_val = tag | remove: 'hashrate:' | upcase | strip %}
+                    {% assign product_hashrates = product_hashrates | append: ' ' | append: hr_val %}
+                  {% else %}
+                    {% assign tag_up = tag | upcase %}
+                    {% if tag_up contains 'TH' %}
+                      {% assign product_hashrates = product_hashrates | append: ' ' | append: tag_up %}
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+                <div class="product-filter-item" data-hashrates="{{ product_hashrates | strip }}">
+                  {% render 'product-card', product: product %}
+                </div>
               {% endif %}
             {% endfor %}
           </div>
@@ -171,12 +204,44 @@
                 <a href="/collections/all" class="btn btn-premium">View All Products</a>
               </div>
             {% endif %}
+          {% else %}
+            <div class="empty-collection glass" id="HashrateEmptyMsg" hidden>
+              <p>No products match this hashrate filter.</p>
+              <button type="button" class="btn btn-premium" data-reset-hashrate>Show All Hashrates</button>
+            </div>
           {% endif %}
+
+        {% elsif collection.handle == 'accessories' and collection.products.size == 0 %}
+          <div class="coming-soon-message glass">
+            <h2>Accessories Coming Soon</h2>
+            <p>We're currently curating a selection of mining accessories including cables, racks, and monitoring tools. Check back soon!</p>
+            <a href="/collections/all" class="btn btn-premium">Browse Other Products</a>
+          </div>
+
         {% elsif collection.products.size > 0 %}
-          <div class="products-grid reveal">
+          <div class="products-grid reveal" id="ProductsGrid">
             {% for product in collection.products %}
-              {% render 'product-card', product: product %}
+              {% assign product_hashrates = '' %}
+              {% for tag in product.tags %}
+                {% if tag contains 'hashrate:' %}
+                  {% assign hr_val = tag | remove: 'hashrate:' | upcase | strip %}
+                  {% assign product_hashrates = product_hashrates | append: ' ' | append: hr_val %}
+                {% else %}
+                  {% assign tag_up = tag | upcase %}
+                  {% if tag_up contains 'TH' %}
+                    {% assign product_hashrates = product_hashrates | append: ' ' | append: tag_up %}
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+              <div class="product-filter-item" data-hashrates="{{ product_hashrates | strip }}">
+                {% render 'product-card', product: product %}
+              </div>
             {% endfor %}
+          </div>
+
+          <div class="empty-collection glass" id="HashrateEmptyMsg" hidden>
+            <p>No products match this hashrate filter.</p>
+            <button type="button" class="btn btn-premium" data-reset-hashrate>Show All Hashrates</button>
           </div>
 
           {% if paginate.pages > 1 %}
@@ -208,12 +273,14 @@
               {% endif %}
             </div>
           {% endif %}
+
         {% else %}
           <div class="empty-collection glass">
             <p>No products found in this collection.</p>
             <a href="/collections/all" class="btn btn-premium">View All Products</a>
           </div>
         {% endif %}
+
       </div>
     </div>
   </div>
