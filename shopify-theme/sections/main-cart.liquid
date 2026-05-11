@@ -1,0 +1,105 @@
+<section class="cart-page section-spacing">
+  <div class="container">
+    <h1 class="cart-title">Your Cart</h1>
+
+    {% if cart.item_count > 0 %}
+      <div class="cart-layout">
+        <div class="cart-items">
+          <table class="cart-table">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in cart.items %}
+                <tr class="cart-item" data-line="{{ forloop.index }}">
+                  <td class="cart-item-product">
+                    <div class="cart-item-info">
+                      <img src="{{ item.image | img_url: '120x120' }}" alt="{{ item.title }}" class="cart-item-img">
+                      <div>
+                        <a href="{{ item.url }}" class="cart-item-title">{{ item.product.title }}</a>
+                        {% unless item.variant.title == 'Default Title' %}
+                          <p class="cart-item-variant">{{ item.variant.title }}</p>
+                        {% endunless %}
+                      </div>
+                    </div>
+                  </td>
+                  <td class="cart-item-price">
+                    {{ item.price | money }}
+                  </td>
+                  <td class="cart-item-quantity">
+                    <input 
+                      type="number" 
+                      value="{{ item.quantity }}" 
+                      min="1" 
+                      class="cart-qty-input" 
+                      data-line="{{ forloop.index }}"
+                    >
+                  </td>
+                  <td class="cart-item-total">
+                    {{ item.line_price | money }}
+                  </td>
+                  <td class="cart-item-remove">
+                    <button class="cart-remove" data-line="{{ forloop.index }}" aria-label="Remove item">
+                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                      </svg>
+                    </button>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="cart-summary glass">
+          <h2 class="cart-summary-title">Order Summary</h2>
+          
+          <div class="cart-summary-row">
+            <span>Subtotal</span>
+            <span class="cart-subtotal">{{ cart.total_price | money }}</span>
+          </div>
+
+          <p class="cart-summary-note">
+            Shipping and taxes calculated at checkout
+          </p>
+
+          <form action="/checkout" method="post">
+            <button type="submit" class="btn btn-premium btn-checkout">
+              Proceed to Checkout
+            </button>
+          </form>
+
+          <a href="/collections/all" class="continue-shopping">
+            ← Continue Shopping
+          </a>
+        </div>
+      </div>
+    {% else %}
+      <div class="cart-empty">
+        <div class="cart-empty-content glass">
+          <svg width="64" height="64" viewBox="0 0 64 64" fill="none" class="cart-empty-icon">
+            <path d="M8 8H12L16.64 40H48L56 16H16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="22" cy="54" r="3" stroke="currentColor" stroke-width="2"/>
+            <circle cx="44" cy="54" r="3" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          <h2>Your cart is empty</h2>
+          <p>Add some premium mining hardware to get started.</p>
+          <a href="/collections/all" class="btn btn-premium">Shop Miners</a>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Cart",
+  "settings": []
+}
+{% endschema %}

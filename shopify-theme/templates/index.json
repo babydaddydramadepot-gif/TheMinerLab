@@ -1,0 +1,41 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {}
+    },
+    "categories": {
+      "type": "categories-grid",
+      "settings": {}
+    },
+    "why_us": {
+      "type": "why-us",
+      "settings": {}
+    },
+    "featured_products": {
+      "type": "featured-products",
+      "settings": {}
+    },
+    "reviews": {
+      "type": "reviews",
+      "settings": {}
+    },
+    "wholesale_cta": {
+      "type": "wholesale-cta",
+      "settings": {}
+    },
+    "faq_preview": {
+      "type": "faq-preview",
+      "settings": {}
+    }
+  },
+  "order": [
+    "hero",
+    "categories",
+    "why_us",
+    "featured_products",
+    "reviews",
+    "wholesale_cta",
+    "faq_preview"
+  ]
+}

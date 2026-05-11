@@ -1,0 +1,106 @@
+{% paginate collection.products by 12 %}
+<section class="collection-page section-spacing">
+  <div class="container">
+    <div class="collection-header reveal">
+      <h1 class="collection-title">{{ collection.title }}</h1>
+      {% if collection.description != blank %}
+        <div class="collection-description">{{ collection.description }}</div>
+      {% endif %}
+    </div>
+
+    <div class="collection-layout">
+      <aside class="collection-sidebar">
+        <div class="filter-group">
+          <h3 class="filter-heading">Categories</h3>
+          <nav class="filter-links">
+            <a href="/collections/asic-miners" class="filter-link {% if collection.handle == 'asic-miners' %}active{% endif %}">
+              ASIC Miners
+            </a>
+            <a href="/collections/power-supplies" class="filter-link {% if collection.handle == 'power-supplies' %}active{% endif %}">
+              Power Supplies
+            </a>
+            <a href="/collections/loki-kits" class="filter-link {% if collection.handle == 'loki-kits' %}active{% endif %}">
+              Loki Kits
+            </a>
+            <a href="/collections/accessories" class="filter-link {% if collection.handle == 'accessories' %}active{% endif %}">
+              Accessories
+            </a>
+          </nav>
+        </div>
+
+        <div class="filter-group">
+          <h3 class="filter-heading">Sort By</h3>
+          <form method="get" action="{{ collection.url }}">
+            <select name="sort_by" class="filter-select" onchange="this.form.submit()">
+              <option value="manual" {% if collection.sort_by == 'manual' %}selected{% endif %}>Featured</option>
+              <option value="best-selling" {% if collection.sort_by == 'best-selling' %}selected{% endif %}>Best Selling</option>
+              <option value="title-ascending" {% if collection.sort_by == 'title-ascending' %}selected{% endif %}>A-Z</option>
+              <option value="title-descending" {% if collection.sort_by == 'title-descending' %}selected{% endif %}>Z-A</option>
+              <option value="price-ascending" {% if collection.sort_by == 'price-ascending' %}selected{% endif %}>Price: Low to High</option>
+              <option value="price-descending" {% if collection.sort_by == 'price-descending' %}selected{% endif %}>Price: High to Low</option>
+            </select>
+          </form>
+        </div>
+      </aside>
+
+      <div class="collection-main">
+        {% if collection.handle == 'accessories' %}
+          <div class="coming-soon-message glass">
+            <h2>Accessories Coming Soon</h2>
+            <p>We're currently curating a selection of mining accessories including cables, racks, and monitoring tools. Check back soon!</p>
+            <a href="/collections/all" class="btn btn-premium">Browse Other Products</a>
+          </div>
+        {% elsif collection.products.size > 0 %}
+          <div class="products-grid reveal">
+            {% for product in collection.products %}
+              {% render 'product-card', product: product %}
+            {% endfor %}
+          </div>
+
+          {% if paginate.pages > 1 %}
+            <div class="pagination">
+              {% if paginate.previous %}
+                <a href="{{ paginate.previous.url }}" class="pagination-btn">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  Previous
+                </a>
+              {% endif %}
+
+              {% for part in paginate.parts %}
+                {% if part.is_link %}
+                  <a href="{{ part.url }}" class="pagination-number">{{ part.title }}</a>
+                {% else %}
+                  <span class="pagination-number active">{{ part.title }}</span>
+                {% endif %}
+              {% endfor %}
+
+              {% if paginate.next %}
+                <a href="{{ paginate.next.url }}" class="pagination-btn">
+                  Next
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </a>
+              {% endif %}
+            </div>
+          {% endif %}
+        {% else %}
+          <div class="empty-collection glass">
+            <p>No products found in this collection.</p>
+            <a href="/collections/all" class="btn btn-premium">View All Products</a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endpaginate %}
+
+{% schema %}
+{
+  "name": "Collection",
+  "settings": []
+}
+{% endschema %}

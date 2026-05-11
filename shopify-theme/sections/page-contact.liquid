@@ -1,0 +1,159 @@
+<section class="contact-page section-spacing">
+  <div class="container">
+    <div class="contact-header reveal">
+      <h1 class="contact-title">Talk to the team</h1>
+      <p class="contact-subtitle">Questions about hardware, wholesale pricing, or technical support? We're here to help.</p>
+    </div>
+
+    <div class="contact-layout">
+      <div class="contact-form-wrapper reveal">
+        {% form 'contact' %}
+          {% if form.posted_successfully? %}
+            <div class="form-success">
+              <p>{{ 'contact.form.post_success' | t }}</p>
+            </div>
+          {% endif %}
+
+          {% if form.errors %}
+            <div class="form-errors">
+              <p>Please correct the errors below:</p>
+              {{ form.errors | default_errors }}
+            </div>
+          {% endif %}
+
+          <div class="form-group">
+            <label for="ContactFormName">Name *</label>
+            <input 
+              type="text" 
+              id="ContactFormName" 
+              name="contact[name]" 
+              required
+              class="form-input"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="ContactFormEmail">Email *</label>
+            <input 
+              type="email" 
+              id="ContactFormEmail" 
+              name="contact[email]" 
+              required
+              class="form-input"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="ContactFormInquiry">Inquiry Type</label>
+            <select id="ContactFormInquiry" name="contact[inquiry]" class="form-select">
+              <option value="general">General Question</option>
+              <option value="sales">Sales Inquiry</option>
+              <option value="wholesale">Wholesale Quote</option>
+              <option value="support">Technical Support</option>
+              <option value="order">Order Status</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="ContactFormMessage">Message *</label>
+            <textarea 
+              id="ContactFormMessage" 
+              name="contact[body]" 
+              rows="6" 
+              required
+              class="form-textarea"
+            ></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-premium">Send Message</button>
+        {% endform %}
+      </div>
+
+      <aside class="contact-info reveal">
+        <div class="contact-card glass">
+          <div class="contact-card-icon">
+            {% render 'icon-message' %}
+          </div>
+          <h3 class="contact-card-title">Email</h3>
+          <a href="mailto:hello@theminerlab.com" class="contact-card-link">
+            hello@theminerlab.com
+          </a>
+        </div>
+
+        <div class="contact-card glass">
+          <div class="contact-card-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3 class="contact-card-title">Hours</h3>
+          <p class="contact-card-text">
+            Sales: 24/7<br>
+            Support: Mon-Fri 9AM-6PM EST
+          </p>
+        </div>
+
+        <div class="contact-card glass">
+          <div class="contact-card-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M21 10C21 17 12 23 12 23S3 17 3 10C3 5.02944 7.02944 1 12 1C16.9706 1 21 5.02944 21 10Z" stroke="currentColor" stroke-width="1.5"/>
+              <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <h3 class="contact-card-title">Location</h3>
+          <p class="contact-card-text">
+            USA-Based Warehouse<br>
+            Domestic Shipping
+          </p>
+        </div>
+
+        <div class="contact-faq">
+          <h3 class="contact-faq-title">Quick FAQs</h3>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <span>How quickly will I get a response?</span>
+              <svg class="faq-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </summary>
+            <div class="faq-answer">
+              <p>We aim to respond within 4 hours during business hours, often sooner for urgent inquiries.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">
+              <span>Can I call you?</span>
+              <svg class="faq-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </summary>
+            <div class="faq-answer">
+              <p>We primarily support via email for documentation. Phone support available for wholesale orders.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">
+              <span>Do you offer technical support?</span>
+              <svg class="faq-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </summary>
+            <div class="faq-answer">
+              <p>Yes! Email support@theminerlab.com with technical questions. Direct engineer support included.</p>
+            </div>
+          </details>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Contact",
+  "settings": []
+}
+{% endschema %}

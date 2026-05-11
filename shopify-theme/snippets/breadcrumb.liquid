@@ -1,0 +1,19 @@
+{% unless template == 'index' or template == '404' %}
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="/">Home</a>
+  {% if product %}
+    {% if product.collections.size > 0 %}
+      <span class="breadcrumb-sep">/</span>
+      <a href="{{ product.collections.first.url }}">{{ product.collections.first.title }}</a>
+    {% endif %}
+    <span class="breadcrumb-sep">/</span>
+    <span class="breadcrumb-current">{{ product.title }}</span>
+  {% elsif collection %}
+    <span class="breadcrumb-sep">/</span>
+    <span class="breadcrumb-current">{{ collection.title }}</span>
+  {% elsif page %}
+    <span class="breadcrumb-sep">/</span>
+    <span class="breadcrumb-current">{{ page.title }}</span>
+  {% endif %}
+</nav>
+{% endunless %}

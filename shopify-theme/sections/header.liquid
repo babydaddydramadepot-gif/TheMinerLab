@@ -1,0 +1,61 @@
+<header class="site-header" id="SiteHeader">
+  <div class="container">
+    <a href="/" class="site-logo">
+      {% render 'icon-cpu' %}
+      <span>THE MINER <span style="color:var(--primary)">LAB</span></span>
+    </a>
+
+    <nav class="site-nav" aria-label="Main navigation">
+      <a href="/" {% if request.path == '/' %}class="active"{% endif %}>Home</a>
+      <a href="/collections/all" {% if request.path contains '/collections' %}class="active"{% endif %}>Shop</a>
+      <a href="/pages/wholesale" {% if request.path contains 'wholesale' %}class="active"{% endif %}>Wholesale</a>
+      <a href="/pages/about" {% if request.path contains 'about' %}class="active"{% endif %}>About</a>
+      <a href="/pages/faq" {% if request.path contains 'faq' %}class="active"{% endif %}>FAQ</a>
+      <a href="/pages/contact" {% if request.path contains 'contact' %}class="active"{% endif %}>Contact</a>
+    </nav>
+
+    <div class="header-actions">
+      <a href="/pages/wholesale" class="btn btn-outline btn-sm" style="display:none;display:flex;" id="HeaderWholesaleBtn">Wholesale</a>
+      <a href="/cart" class="cart-badge" aria-label="Cart ({{ cart.item_count }} items)">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+        {% if cart.item_count > 0 %}
+          <span class="cart-count">{{ cart.item_count }}</span>
+        {% endif %}
+      </a>
+      <button class="mobile-menu-toggle" aria-label="Open navigation menu" aria-expanded="false" aria-controls="MobileMenu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M3 12H21M3 6H21M3 18H21"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="mobile-menu-overlay" id="MobileMenu" aria-hidden="true">
+    <div class="mobile-menu-content">
+      <button class="mobile-menu-close" aria-label="Close menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M18 6L6 18M6 6L18 18"/>
+        </svg>
+      </button>
+      <nav class="mobile-nav" aria-label="Mobile navigation">
+        <a href="/">Home</a>
+        <a href="/collections/all">Shop</a>
+        <a href="/pages/wholesale">Wholesale</a>
+        <a href="/pages/about">About</a>
+        <a href="/pages/faq">FAQ</a>
+        <a href="/pages/contact">Contact</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": []
+}
+{% endschema %}

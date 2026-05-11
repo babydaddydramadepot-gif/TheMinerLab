@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0c0f14">
+  
+  <title>{{ page_title }}{% if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif %}{% if current_page != 1 %} &ndash; Page {{ current_page }}{% endif %}{% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}</title>
+
+  {% if page_description %}
+    <meta name="description" content="{{ page_description | escape }}">
+  {% endif %}
+
+  <link rel="canonical" href="{{ canonical_url }}">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  {{ content_for_header }}
+
+  {{ 'theme.css' | asset_url | stylesheet_tag }}
+</head>
+<body class="dark">
+  <a class="skip-to-content-link" href="#MainContent">
+    {{ 'general.accessibility.skip_to_content' | t }}
+  </a>
+
+  {% section 'header' %}
+
+  <main id="MainContent" role="main">
+    {{ content_for_layout }}
+  </main>
+
+  {% section 'footer' %}
+
+  <!-- Cart Drawer -->
+  <div id="CartDrawer" class="cart-drawer" data-cart-drawer hidden>
+    <div class="cart-drawer-overlay"></div>
+    <div class="cart-drawer-content glass">
+      <div class="cart-drawer-header">
+        <h2 class="cart-drawer-title">Your Cart</h2>
+        <button class="cart-drawer-close" aria-label="Close cart">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+      
+      <div class="cart-drawer-items">
+        {% if cart.item_count > 0 %}
+          {% for item in cart.items %}
+            <div class="cart-drawer-item">
+              <img src="{{ item.image | img_url: '120x120' }}" alt="{{ item.title }}" loading="lazy">
+              <div class="cart-drawer-item-details">
+                <a href="{{ item.url }}" class="cart-drawer-item-title">{{ item.product.title }}</a>
+                {% unless item.variant.title == 'Default Title' %}
+                  <p class="cart-drawer-item-variant">{{ item.variant.title }}</p>
+                {% endunless %}
+                <p class="cart-drawer-item-price">{{ item.final_price | money }}</p>
+              </div>
+              <div class="cart-drawer-item-qty">
+                <span>Qty: {{ item.quantity }}</span>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <p class="cart-drawer-empty">Your cart is empty</p>
+        {% endif %}
+      </div>
+
+      {% if cart.item_count > 0 %}
+        <div class="cart-drawer-footer">
+          <div class="cart-drawer-subtotal">
+            <span>Subtotal</span>
+            <span class="cart-drawer-subtotal-amount">{{ cart.total_price | money }}</span>
+          </div>
+          <a href="/cart" class="btn btn-secondary">View Cart</a>
+          <form action="/checkout" method="post">
+            <button type="submit" class="btn btn-premium">Checkout</button>
+          </form>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-menu-overlay">
+    <div class="mobile-menu-content">
+      <button class="mobile-menu-close" aria-label="Close menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <nav class="mobile-menu-nav">
+        <a href="/">Home</a>
+        <a href="/collections/all">Shop</a>
+        <a href="/pages/wholesale">Wholesale</a>
+        <a href="/pages/about">About</a>
+        <a href="/pages/faq">FAQ</a>
+        <a href="/pages/contact">Contact</a>
+      </nav>
+    </div>
+  </div>
+
+  {{ 'theme.js' | asset_url | script_tag }}
+</body>
+</html>

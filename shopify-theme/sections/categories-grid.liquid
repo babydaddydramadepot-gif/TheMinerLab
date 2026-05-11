@@ -1,0 +1,87 @@
+<section class="categories-section section-spacing">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-eyebrow">Catalog</span>
+      <h2 class="section-title">Built for every operator</h2>
+    </div>
+
+    <div class="categories-grid reveal">
+      <a href="/collections/asic-miners" class="category-card gradient-border">
+        <div class="category-icon">
+          {% render 'icon-cpu' %}
+        </div>
+        <h3 class="category-label">ASIC Miners</h3>
+        <p class="category-description">Tested surplus hash power</p>
+        <div class="category-arrow">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M5 10H15M15 10L10 5M15 10L10 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </a>
+
+      <a href="/collections/power-supplies" class="category-card gradient-border">
+        <div class="category-icon">
+          {% render 'icon-zap' %}
+        </div>
+        <h3 class="category-label">Power Supplies</h3>
+        <p class="category-description">APW series PSUs</p>
+        <div class="category-arrow">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M5 10H15M15 10L10 5M15 10L10 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </a>
+
+      <a href="/collections/loki-kits" class="category-card gradient-border">
+        <div class="category-icon">
+          {% render 'icon-package' %}
+        </div>
+        <h3 class="category-label">Loki Kits</h3>
+        <p class="category-description">Custom immersion systems</p>
+        <div class="category-arrow">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M5 10H15M15 10L10 5M15 10L10 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </a>
+
+      <a href="/collections/accessories" class="category-card gradient-border">
+        <div class="category-icon">
+          {% render 'icon-settings' %}
+        </div>
+        <h3 class="category-label">Accessories</h3>
+        <p class="category-description">Cables, racks & more</p>
+        <div class="category-arrow">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M5 10H15M15 10L10 5M15 10L10 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </a>
+
+      <a href="/pages/wholesale" class="category-card gradient-border category-card-featured">
+        <div class="category-icon">
+          {% render 'icon-truck' %}
+        </div>
+        <h3 class="category-label">Wholesale</h3>
+        <p class="category-description">Pallet quantities available</p>
+        <div class="category-arrow">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M5 10H15M15 10L10 5M15 10L10 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Categories Grid",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Categories Grid"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,368 @@
+<section class="product-page section-spacing">
+  <div class="container">
+    {% render 'breadcrumb' %}
+
+    <div class="product-main-grid">
+      <div class="product-gallery">
+        <div class="product-main-image-wrapper">
+          <div class="product-badge-overlay">
+            <span class="badge badge-primary">Tested Surplus</span>
+          </div>
+          <div class="grid-bg"></div>
+          <img 
+            src="{{ product.featured_image | img_url: '1000x1000' }}" 
+            alt="{{ product.title | escape }}"
+            class="product-main-image"
+            id="MainProductImage"
+          >
+        </div>
+        
+        {% if product.images.size > 1 %}
+          <div class="product-thumbnails">
+            {% for image in product.images limit: 5 %}
+              <button 
+                class="product-thumbnail {% if forloop.first %}active{% endif %}"
+                data-full="{{ image | img_url: '1000x1000' }}"
+                type="button"
+              >
+                <img src="{{ image | img_url: '120x120' }}" alt="{{ product.title | escape }}">
+              </button>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="product-details">
+        <div class="product-type-eyebrow">
+          {% if product.type != blank %}
+            {{ product.type }}
+          {% else %}
+            ASIC Miner
+          {% endif %}
+        </div>
+
+        <h1 class="product-title">{{ product.title }}</h1>
+
+        <div class="product-quick-stats">
+          {% assign hashrate = '' %}
+          {% assign algo = '' %}
+          {% assign efficiency = '' %}
+          
+          {% for tag in product.tags %}
+            {% if tag contains 'hashrate:' %}
+              {% assign hashrate = tag | remove: 'hashrate:' %}
+            {% endif %}
+            {% if tag contains 'algo:' %}
+              {% assign algo = tag | remove: 'algo:' %}
+            {% endif %}
+            {% if tag contains 'efficiency:' %}
+              {% assign efficiency = tag | remove: 'efficiency:' %}
+            {% endif %}
+          {% endfor %}
+
+          <div class="quick-stat">
+            <span class="quick-stat-label">Hashrate</span>
+            <span class="quick-stat-value">{{ hashrate | default: '110 TH/s' }}</span>
+          </div>
+          <div class="quick-stat">
+            <span class="quick-stat-label">Algorithm</span>
+            <span class="quick-stat-value">{{ algo | default: 'SHA-256' }}</span>
+          </div>
+          <div class="quick-stat">
+            <span class="quick-stat-label">Efficiency</span>
+            <span class="quick-stat-value">{{ efficiency | default: '29.5 J/TH' }}</span>
+          </div>
+        </div>
+
+        <div class="product-price-wrapper">
+          {% if product.compare_at_price > product.price %}
+            <span class="product-price-compare">{{ product.compare_at_price | money }}</span>
+          {% endif %}
+          <span class="product-price">{{ product.selected_or_first_available_variant.price | money }}</span>
+        </div>
+
+        <div class="product-description">
+          {{ product.description }}
+        </div>
+
+        <form method="post" action="/cart/add" id="AddToCartForm" class="product-form">
+          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+
+          {% unless product.has_only_default_variant %}
+            {% for option in product.options_with_values %}
+              {% unless option.name contains 'OS' or option.name contains 'Firmware' %}
+                <div class="variant-option-group" data-option="{{ option.name }}">
+                  <label class="variant-label">{{ option.name }}</label>
+                  <div class="variant-pills">
+                    {% for value in option.values %}
+                      <button 
+                        type="button"
+                        class="variant-option-btn {% if forloop.first %}active{% endif %}"
+                        data-value="{{ value | escape }}"
+                      >
+                        {{ value }}
+                      </button>
+                    {% endfor %}
+                  </div>
+                </div>
+              {% endunless %}
+            {% endfor %}
+          {% endunless %}
+
+          <div class="os-option-group">
+            <label class="variant-label">Operating System</label>
+            <div class="variant-pills">
+              <button type="button" class="os-option-btn active" data-os="vnish">
+                Vnish OS
+              </button>
+              <button type="button" class="os-option-btn" data-os="braiins">
+                Braiins OS
+              </button>
+            </div>
+            <p class="os-note">Pre-configured firmware. Same price for both options.</p>
+          </div>
+
+          <input type="hidden" name="quantity" value="1">
+
+          <div class="product-actions">
+            <button type="submit" class="btn btn-premium btn-add-to-cart">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M2.5 2.5H3.75L5.83 12.5H15L17.5 5H5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Add to Cart
+            </button>
+            <a href="/pages/wholesale" class="btn btn-secondary">
+              Request Wholesale Quote
+            </a>
+          </div>
+        </form>
+
+        <div class="product-trust-badges">
+          <div class="trust-badge">
+            {% render 'icon-shield' %}
+            <span>Tested Surplus</span>
+          </div>
+          <div class="trust-badge">
+            {% render 'icon-truck' %}
+            <span>USA Shipping</span>
+          </div>
+          <div class="trust-badge">
+            {% render 'icon-message' %}
+            <span>Engineer Support</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-specs-section">
+      <div class="specs-tabs">
+        <button class="specs-tab active" data-tab="specifications">Specifications</button>
+        <button class="specs-tab" data-tab="benchmarked">Benchmarked & Tested</button>
+        <button class="specs-tab" data-tab="deployment">Deployment Ready</button>
+      </div>
+
+      <div class="specs-content">
+        <div class="specs-panel active" data-panel="specifications">
+          <div class="specs-grid">
+            {% assign power = '' %}
+            {% assign noise = '' %}
+            {% assign cooling = '' %}
+            {% assign temp = '' %}
+            
+            {% for tag in product.tags %}
+              {% if tag contains 'power:' %}
+                {% assign power = tag | remove: 'power:' %}
+              {% endif %}
+              {% if tag contains 'noise:' %}
+                {% assign noise = tag | remove: 'noise:' %}
+              {% endif %}
+              {% if tag contains 'cooling:' %}
+                {% assign cooling = tag | remove: 'cooling:' %}
+              {% endif %}
+              {% if tag contains 'temp:' %}
+                {% assign temp = tag | remove: 'temp:' %}
+              {% endif %}
+            {% endfor %}
+
+            <div class="spec-item">
+              <span class="spec-label">Hashrate</span>
+              <span class="spec-value">{{ hashrate | default: '110 TH/s' }}</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Power Consumption</span>
+              <span class="spec-value">{{ power | default: '3250W' }}</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Efficiency</span>
+              <span class="spec-value">{{ efficiency | default: '29.5 J/TH' }}</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Algorithm</span>
+              <span class="spec-value">{{ algo | default: 'SHA-256' }}</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Noise Level</span>
+              <span class="spec-value">{{ noise | default: '75 dB' }}</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Cooling</span>
+              <span class="spec-value">{{ cooling | default: 'Air-cooled' }}</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Operating Temp</span>
+              <span class="spec-value">{{ temp | default: '5-40°C' }}</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">PSU Required</span>
+              <span class="spec-value">APW12 or equivalent</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="specs-panel" data-panel="benchmarked">
+          <div class="benchmarked-content">
+            <h3>100% Tested Before Shipment</h3>
+            <ul class="benchmarked-list">
+              <li>Full hashrate validation (24hr burn-in test)</li>
+              <li>Thermal performance benchmarking</li>
+              <li>Board-level inspection for defects</li>
+              <li>Fan operation and RPM verification</li>
+              <li>Network connectivity testing</li>
+              <li>Firmware update verification</li>
+            </ul>
+            <p class="benchmarked-note">
+              Each unit includes a test report with hashrate measurements and thermal data.
+            </p>
+          </div>
+        </div>
+
+        <div class="specs-panel" data-panel="deployment">
+          <div class="deployment-content">
+            <h3>Ready to Mine Out of the Box</h3>
+            <ul class="deployment-list">
+              <li>Pre-configured with your choice of Vnish OS or Braiins OS</li>
+              <li>Latest firmware updates installed</li>
+              <li>Factory reset and clean configuration</li>
+              <li>Thermal paste reapplication (if needed)</li>
+              <li>Secure packaging for freight shipping</li>
+            </ul>
+            <p class="deployment-note">
+              Setup guide and pool configuration instructions included with every order.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-faq-section">
+      <h3 class="product-faq-title">Product FAQs</h3>
+      <div class="faq-group">
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>What power supply do I need?</span>
+            <svg class="faq-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>This miner requires an APW12 or equivalent PSU rated for at least 3250W. We sell compatible PSUs separately.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>Is this unit new or used?</span>
+            <svg class="faq-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>These are genuine surplus units from verified channels. Each miner is fully tested and validated to manufacturer specifications.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>What's included in the box?</span>
+            <svg class="faq-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>Each order includes the miner unit, power cables, and setup documentation. PSU sold separately.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>Do you offer warranty or returns?</span>
+            <svg class="faq-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>All units come with a 30-day warranty covering DOA and manufacturing defects. Contact our support team for any issues.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>Can you help with setup and configuration?</span>
+            <svg class="faq-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>Yes! Our engineering team provides direct support. Email us at support@theminerlab.com with your questions.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    {% if product.collections.first.products.size > 1 %}
+      <div class="related-products-section">
+        <h3 class="related-products-title">More like this</h3>
+        <div class="products-grid">
+          {% for related_product in product.collections.first.products limit: 4 %}
+            {% unless related_product.id == product.id %}
+              {% render 'product-card', product: related_product %}
+            {% endunless %}
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<script>
+  window.productVariants = {{ product.variants | json }};
+  window.productOptions = {{ product.options | json }};
+</script>
+
+<style>
+  .specs-tab { cursor: pointer; padding: 0.75rem 1.5rem; background: transparent; border: 1px solid var(--border); border-radius: var(--radius); color: var(--muted-foreground); transition: all 0.2s; }
+  .specs-tab.active { background: var(--primary); color: var(--primary-foreground); border-color: var(--primary); }
+  .specs-panel { display: none; padding: 2rem 0; }
+  .specs-panel.active { display: block; }
+</style>
+
+<script>
+  document.querySelectorAll('.specs-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = tab.dataset.tab;
+      document.querySelectorAll('.specs-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.specs-panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.querySelector(`[data-panel="${target}"]`).classList.add('active');
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Product",
+  "settings": [],
+  "blocks": [],
+  "tag": "section"
+}
+{% endschema %}

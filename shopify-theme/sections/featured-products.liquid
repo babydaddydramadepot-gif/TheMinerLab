@@ -1,0 +1,53 @@
+<section class="featured-products-section section-spacing">
+  <div class="container">
+    <div class="section-header-with-action reveal">
+      <div>
+        <span class="section-eyebrow">Featured</span>
+        <h2 class="section-title">In-stock miners</h2>
+      </div>
+      <a href="/collections/all" class="section-action-link">
+        View all <span class="arrow">→</span>
+      </a>
+    </div>
+
+    <div class="products-grid reveal">
+      {% assign featured_collection = collections[section.settings.collection] | default: collections.all %}
+      {% assign products_limit = section.settings.products_to_show | default: 8 %}
+      
+      {% if featured_collection.products.size > 0 %}
+        {% for product in featured_collection.products limit: products_limit %}
+          {% render 'product-card', product: product %}
+        {% endfor %}
+      {% else %}
+        <p class="empty-state">No products available at this time.</p>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Featured Products",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 12,
+      "step": 2,
+      "default": 8,
+      "label": "Products to show"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Products"
+    }
+  ]
+}
+{% endschema %}
