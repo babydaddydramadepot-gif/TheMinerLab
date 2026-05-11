@@ -1561,7 +1561,7 @@ p {
   letter-spacing: 0.08em;
   color: var(--muted);
   transition: color 0.3s ease;
-  white-space: normal;
+  white-space: nowrap;
   text-align: left;
   margin-left: auto;
 }
@@ -1672,7 +1672,7 @@ p {
   margin-bottom: 1rem;
 }
 
-.review-body {
+.review-text {
   font-size: 0.925rem;
   line-height: 1.7;
   color: rgba(241,245,249,0.9);
